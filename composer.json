@@ -1,0 +1,65 @@
+{
+	"name": "lochmueller/static-export",
+	"type": "typo3-cms-extension",
+	"description": "Create a static export of the website",
+	"repositories": [
+		{
+			"type": "composer",
+			"url": "https://composer.typo3.org/"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"FRUIT\\StaticExport\\": "Classes/"
+		}
+	},
+	"keywords": [
+		"TYPO3 CMS",
+		"Static Export"
+	],
+	"authors": [
+		{
+			"name": "Tim Lochmüller",
+			"email": "webmaster@fruit-lab.de",
+			"role": "Developer",
+			"homepage": "https://github.com/lochmueller"
+		}
+	],
+	"require": {
+		"php": "^7.3||^7.4",
+		"ext-json": "*",
+		"ext-pdo": "*",
+		"typo3/cms-core": "^10.4",
+		"aoepeople/crawler": "^10.0"
+	},
+	"homepage": "https://github.com/lochmueller/static_export",
+	"license": "GPL-2.0-or-later",
+	"support": {
+		"issues": "https://github.com/lochmueller/static_export/issues"
+	},
+	"require-dev": {
+		"friendsofphp/php-cs-fixer": "^2.16"
+	},
+	"config": {
+		"vendor-dir": ".Build/vendor",
+		"bin-dir": ".Build/bin"
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "static_export",
+			"cms-package-dir": "{$vendor-dir}/typo3/cms",
+			"web-dir": ".Build/Web",
+			"Package": {
+				"partOfMinimalUsableSystem": true
+			}
+		}
+	},
+	"scripts": {
+		"code": [
+			"@tool:php-cs-fixer"
+		],
+		"tool:php-cs-fixer": [
+			"php-cs-fixer fix --config Resources/Private/Build/PhpCsFixer.php"
+		]
+	}
+}
