@@ -1,8 +1,5 @@
 <?php
 
-/**
- * BackendController.
- */
 declare(strict_types=1);
 
 namespace FRUIT\StaticExport\Controller;
@@ -27,9 +24,8 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     public function listAction($export = false)
     {
-
-        if($export) {
-            GeneralUtility::makeInstance(Exporter::class)->export();
+        if ($export) {
+            $this->objectManager->get(Exporter::class)->export();
         }
         $this->view->assignMultiple([
         ]);

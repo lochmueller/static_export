@@ -29,8 +29,10 @@
 		"php": "^7.3||^7.4",
 		"ext-json": "*",
 		"ext-pdo": "*",
+		"ext-zip": "*",
 		"typo3/cms-core": "^10.4",
-		"aoepeople/crawler": "^10.0"
+		"aoepeople/crawler": "^10.0",
+		"lochmueller/staticfilecache": "^12.3"
 	},
 	"homepage": "https://github.com/lochmueller/static_export",
 	"license": "GPL-2.0-or-later",
