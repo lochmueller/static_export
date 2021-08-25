@@ -8,7 +8,6 @@ use FRUIT\StaticExport\Event\CreateExportEvent;
 use FRUIT\StaticExport\Service\Exporter;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 class ExportPagesEventListener
 {

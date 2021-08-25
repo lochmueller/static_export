@@ -1,13 +1,11 @@
 <?php
 
-
-
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
     'static_export',
     'web',
     'static_export',
     '',
-    [\FRUIT\StaticExport\Controller\BackendController::class => 'list'],
+    [\FRUIT\StaticExport\Controller\BackendController::class => 'list,download'],
     [
         // Additional configuration
         'access' => 'user, group',

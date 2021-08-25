@@ -1,22 +1,31 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-			xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
-			xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
-			data-namespace-typo3-fluid="true">
+      xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+      xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+      data-namespace-typo3-fluid="true">
 
 <f:layout name="Backend"/>
 
 <f:section name="Content">
 
-	<h1>Static Export</h1>
+    <h1>Static Export</h1>
 
-	<f:flashMessages/>
+    <f:flashMessages/>
 
-	TEST
+    <h2>Create new Export</h2>
 
+    <p>This action will ZIP all current HTML files and collection different assets to create a export</p>
 
-	<f:form action="list">
-		<f:form.hidden name="export" value="1" />
-		<f:form.submit value="Export!!!" class="btn btn-primary"/>
-	</f:form>
+    <f:form action="list">
+        <f:form.hidden name="export" value="1"/>
+        <f:form.submit value="Create Export" class="btn btn-primary"/>
+    </f:form>
+
+    <h2>Existing exports</h2>
+
+    <ul>
+        <f:for each="{exports}" as="export">
+            <li><f:link.action action="download" arguments="{fileName: export}">{export}</f:link.action></li>
+        </f:for>
+    </ul>
 </f:section>
 </html>
