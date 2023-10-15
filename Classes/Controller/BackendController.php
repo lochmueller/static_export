@@ -4,41 +4,51 @@ declare(strict_types=1);
 
 namespace FRUIT\StaticExport\Controller;
 
+use TYPO3\CMS\Backend\Attribute\Controller;
 use FRUIT\StaticExport\Service\Exporter;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
-/**
- * BackendController.
- */
+#[Controller]
 class BackendController extends ActionController
 {
+    public function __construct(
+        protected ModuleTemplateFactory $moduleTemplateFactory,
+        protected Exporter $exporter,
+    ) {
+    }
 
     /**
      * Basic backend list.
      * @param bool $export
      */
-    public function listAction($export = false)
+    public function listAction($export = false):\Psr\Http\Message\ResponseInterface
     {
         if ($export) {
-            $this->objectManager->get(Exporter::class)->export();
+            $this->exporter->export();
         }
         $this->view->assignMultiple([
             'exports' => $this->getExports()
         ]);
+
+        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+        $moduleTemplate->setContent($this->view->render());
+        return $this->htmlResponse($moduleTemplate->renderContent());
     }
 
     /**
      * Basic backend list.
      * @param string $fileName
      */
-    public function downloadAction(string $fileName)
+    public function downloadAction(string $fileName):\Psr\Http\Message\ResponseInterface
     {
         if (!in_array($fileName, $this->getExports())) {
             throw new \Exception('Wrong filename', 123678);
         }
 
+        // @todo Move to file response
         $path = $this->getExportBasePath() . '/' . $fileName;
 
         header("Content-Type: application/zip");
