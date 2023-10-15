@@ -26,13 +26,12 @@
 		}
 	],
 	"require": {
-		"php": "^7.3||^7.4",
+		"php": "^8.0",
 		"ext-json": "*",
 		"ext-pdo": "*",
 		"ext-zip": "*",
-		"typo3/cms-core": "^10.4",
-		"aoepeople/crawler": "^10.0",
-		"lochmueller/staticfilecache": "^12.3"
+		"typo3/cms-core": "^12.4",
+		"lochmueller/staticfilecache": "^13.1"
 	},
 	"homepage": "https://github.com/lochmueller/static_export",
 	"license": "GPL-2.0-or-later",
@@ -40,11 +39,15 @@
 		"issues": "https://github.com/lochmueller/static_export/issues"
 	},
 	"require-dev": {
-		"friendsofphp/php-cs-fixer": "^2.16"
+		"friendsofphp/php-cs-fixer": "^3.35"
 	},
 	"config": {
 		"vendor-dir": ".Build/vendor",
-		"bin-dir": ".Build/bin"
+		"bin-dir": ".Build/bin",
+		"allow-plugins": {
+			"typo3/cms-composer-installers": true,
+			"typo3/class-alias-loader": true
+		}
 	},
 	"extra": {
 		"typo3/cms": {
