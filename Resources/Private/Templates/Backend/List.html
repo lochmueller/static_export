@@ -13,7 +13,8 @@
 
     <h2>Create new Export</h2>
 
-    <p>This action will ZIP all current HTML files and collection different assets to create a export</p>
+    <p>This action will ZIP all current HTML files of the collector and collection different assets to create a
+        export.<br/>The HTMl files are also processed by some post processors.</p>
 
     <f:form action="list">
         <f:form.hidden name="export" value="1"/>
@@ -21,11 +22,27 @@
     </f:form>
 
     <h2>Existing exports</h2>
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th>Export-Name</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
 
-    <ul>
         <f:for each="{exports}" as="export">
-            <li><f:link.action action="download" arguments="{fileName: export}">{export}</f:link.action></li>
+            <tr>
+                <td>{export}</td>
+                <td>
+                    <f:link.action action="download" arguments="{fileName: export}" class="btn btn-primary">Download
+                    </f:link.action>
+                    <f:link.action action="publish" arguments="{fileName: export}" class="btn btn-primary">Publish
+                    </f:link.action>
+                </td>
+            </tr>
         </f:for>
-    </ul>
+        </tbody>
+    </table>
 </f:section>
 </html>

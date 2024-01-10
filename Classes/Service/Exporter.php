@@ -33,7 +33,7 @@ class Exporter
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function export()
+    public function export():string
     {
         $this->checkEnv();
 
@@ -49,6 +49,7 @@ class Exporter
         $this->eventDispatcher->dispatch($event);
 
         $event->getZip()->close();
+        return  $exportName . '.zip';
     }
 
     protected function checkEnv()

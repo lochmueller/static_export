@@ -2,17 +2,18 @@
 
 return [
     'static_export' => [
-        'parent' => 'web',
-        'position' => ['after' => 'web_info'],
+        'parent' => 'file',
         'access' => 'user,group',
         'workspaces' => 'live',
-        'path' => '/module/page/static-export',
+        'path' => '/module/file/static-export',
         'labels' => 'LLL:EXT:static_export/Resources/Private/Language/locallang_mod.xlf',
         'extensionName' => 'StaticExport',
+        'inheritNavigationComponentFromMainModule' => false,
         'controllerActions' => [
             \FRUIT\StaticExport\Controller\BackendController::class => [
                 'list',
                 'download',
+                'publish',
             ],
         ],
     ],

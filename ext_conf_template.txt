@@ -1,0 +1,2 @@
+# cat=general; type=string; label=Publish target
+publishTarget =
