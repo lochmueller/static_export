@@ -1,5 +1,7 @@
 <?php
 
+use FRUIT\StaticExport\Controller\BackendController;
+
 return [
     'static_export' => [
         'parent' => 'file',
@@ -10,7 +12,7 @@ return [
         'extensionName' => 'StaticExport',
         'inheritNavigationComponentFromMainModule' => false,
         'controllerActions' => [
-            \FRUIT\StaticExport\Controller\BackendController::class => [
+            BackendController::class => [
                 'list',
                 'download',
                 'publish',
