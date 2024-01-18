@@ -9,7 +9,7 @@ use FRUIT\StaticExport\Service\Exporter;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class ExportPagesEventListener
+class PagesCreateExportEventListener
 {
     public function __invoke(CreateExportEvent $event)
     {

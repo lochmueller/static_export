@@ -7,12 +7,12 @@ services:
   FRUIT\StaticExport\:
     resource: '../Classes/*'
 
-  FRUIT\StaticExport\EventListener\ExportAssetsEventListener:
+  FRUIT\StaticExport\EventListener\AssetsCreateExportEventListener:
     tags:
       - name: event.listener
         event: FRUIT\StaticExport\Event\CreateExportEvent
 
-  FRUIT\StaticExport\EventListener\ExportPagesEventListener:
+  FRUIT\StaticExport\EventListener\PagesCreateExportEventListener:
     tags:
       - name: event.listener
         event: FRUIT\StaticExport\Event\CreateExportEvent
@@ -21,3 +21,8 @@ services:
     tags:
       - name: event.listener
         event: FRUIT\StaticExport\Event\ProcessContentEvent
+
+  FRUIT\StaticExport\Command\ExportAndPublishCommand:
+    tags:
+      - name: 'console.command'
+        command: 'staticexport:export-and-publish'

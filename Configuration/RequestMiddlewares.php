@@ -7,10 +7,10 @@ return [
         'static-export/collect' => [
             'target' => CollectMiddleware::class,
             'before' => [
-                'staticfilecache/prepare',
+                'typo3/cms-frontend/base-redirect-resolver',
             ],
             'after' => [
-                'staticfilecache/generate',
+                'typo3/cms-frontend/authentication',
             ],
         ],
     ],
