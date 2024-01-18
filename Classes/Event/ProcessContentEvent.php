@@ -6,8 +6,10 @@ namespace FRUIT\StaticExport\Event;
 
 final class ProcessContentEvent
 {
-
-    protected string $content;
+    /**
+     * @var string
+     */
+    protected $content;
 
     /**
      * @param string $content
@@ -26,6 +28,4 @@ final class ProcessContentEvent
     {
         $this->content = $content;
     }
-
-
 }

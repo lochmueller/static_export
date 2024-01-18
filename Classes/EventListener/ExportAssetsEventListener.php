@@ -10,13 +10,12 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ExportAssetsEventListener
 {
-
     public function __invoke(CreateExportEvent $event)
     {
         $publicDir = Environment::getPublicPath() . '/';
         $assetsCompressed = $publicDir . 'typo3temp/assets/compressed/';
 
-        $files = (array) GeneralUtility::getAllFilesAndFoldersInPath(
+        $files = (array)GeneralUtility::getAllFilesAndFoldersInPath(
             [],
             $assetsCompressed,
             'css,js',
@@ -28,5 +27,4 @@ class ExportAssetsEventListener
             $event->getZip()->addFile($publicDir . $file, $file);
         }
     }
-
 }

@@ -26,23 +26,23 @@ class Collector
     {
         /** @var \TYPO3\CMS\Core\Http\Uri $uri */
         $uri = clone $request->getUri();
-        $uri = $uri->withHost('')->withScheme('');
-        if ((string) pathinfo($uri->getPath(), PATHINFO_EXTENSION) === '') {
+        $uri = $uri->withHost('')->withScheme('')->withPort(null);
+        if ('' === (string)pathinfo($uri->getPath(), \PATHINFO_EXTENSION)) {
             $uri = $uri->withPath(rtrim($uri->getPath(), '/') . '/index.html');
         }
 
-        $targetFile = Environment::getProjectPath() . Exporter::BASE_EXPORT_DIR . Exporter::COLLECT_FOLDER . '/' . ltrim((string) $uri, '/');
+        $targetFile = Environment::getProjectPath() . Exporter::BASE_EXPORT_DIR . Exporter::COLLECT_FOLDER . '/' . ltrim((string)$uri, '/');
 
         if (is_file($targetFile)) {
             unlink($targetFile);
         }
 
-        $content = (string) $response->getBody();
+        $content = (string)$response->getBody();
+
         $event = new ProcessContentEvent($content);
         $this->eventDispatcher->dispatch($event);
 
-        GeneralUtility::mkdir_deep(pathinfo($targetFile, PATHINFO_DIRNAME));
+        GeneralUtility::mkdir_deep(pathinfo($targetFile, \PATHINFO_DIRNAME));
         GeneralUtility::writeFile($targetFile, $event->getContent());
     }
-
 }

@@ -1,9 +1,5 @@
 <?php
 
-
-/**
- * BackendController.
- */
 declare(strict_types=1);
 
 namespace FRUIT\StaticExport\Service;
@@ -15,7 +11,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class Exporter
 {
-
     /** @var EventDispatcherInterface */
     protected $eventDispatcher;
 
@@ -33,7 +28,7 @@ class Exporter
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function export():string
+    public function export(): string
     {
         $this->checkEnv();
 
@@ -49,7 +44,8 @@ class Exporter
         $this->eventDispatcher->dispatch($event);
 
         $event->getZip()->close();
-        return  $exportName . '.zip';
+
+        return $exportName . '.zip';
     }
 
     protected function checkEnv()
@@ -67,7 +63,5 @@ class Exporter
         if (!is_dir($exportBaseDir . self::COLLECT_FOLDER)) {
             GeneralUtility::mkdir($exportBaseDir . self::COLLECT_FOLDER);
         }
-
     }
-
 }

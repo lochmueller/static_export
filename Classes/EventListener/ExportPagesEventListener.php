@@ -11,12 +11,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ExportPagesEventListener
 {
-
     public function __invoke(CreateExportEvent $event)
     {
         $pagesDir = Environment::getProjectPath() . Exporter::BASE_EXPORT_DIR . Exporter::COLLECT_FOLDER . '/';
 
-        $files = (array) GeneralUtility::getAllFilesAndFoldersInPath(
+        $files = (array)GeneralUtility::getAllFilesAndFoldersInPath(
             [],
             $pagesDir,
             '',
@@ -34,5 +33,4 @@ class ExportPagesEventListener
             }
         }
     }
-
 }

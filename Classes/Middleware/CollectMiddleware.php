@@ -18,7 +18,7 @@ class CollectMiddleware implements MiddlewareInterface
         $response = $handler->handle($request);
 
         if ($response->hasHeader('X-SFC-Cachable')) {
-            $cachable = (bool) $response->getHeaderLine('X-SFC-Cachable') || true;
+            $cachable = (bool)$response->getHeaderLine('X-SFC-Cachable') || true;
             if ($cachable) {
                 GeneralUtility::makeInstance(Collector::class)->collect($request, $response);
             }

@@ -6,8 +6,10 @@ namespace FRUIT\StaticExport\Event;
 
 final class CreateExportEvent
 {
-
-    protected \ZipArchive $zip;
+    /**
+     * @var \ZipArchive
+     */
+    protected $zip;
 
     /**
      * @param \ZipArchive $zip
@@ -21,5 +23,4 @@ final class CreateExportEvent
     {
         return $this->zip;
     }
-
 }

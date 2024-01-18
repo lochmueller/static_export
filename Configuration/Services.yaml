@@ -10,11 +10,14 @@ services:
   FRUIT\StaticExport\EventListener\ExportAssetsEventListener:
     tags:
       - name: event.listener
-        identifier: 'staticExportExportAssets'
         event: FRUIT\StaticExport\Event\CreateExportEvent
 
   FRUIT\StaticExport\EventListener\ExportPagesEventListener:
     tags:
       - name: event.listener
-        identifier: 'staticExportExportPages'
         event: FRUIT\StaticExport\Event\CreateExportEvent
+
+  FRUIT\StaticExport\EventListener\MainContentOnlyProcessContentEventListener:
+    tags:
+      - name: event.listener
+        event: FRUIT\StaticExport\Event\ProcessContentEvent
