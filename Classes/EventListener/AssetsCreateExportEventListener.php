@@ -6,6 +6,7 @@ namespace FRUIT\StaticExport\EventListener;
 
 use FRUIT\StaticExport\Event\CreateExportEvent;
 use FRUIT\StaticExport\Service\Exporter;
+use FRUIT\StaticExport\Service\PathService;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
@@ -73,21 +74,24 @@ class AssetsCreateExportEventListener
 
     protected function getProcessedFiles(): iterable
     {
-        $pagesDir = Environment::getProjectPath() . Exporter::BASE_EXPORT_DIR . Exporter::COLLECT_FOLDER . '/';
+        /** @var PathService $pathService */
+        $pathService = GeneralUtility::makeInstance(PathService::class);
+
+        $collectFolder = $pathService->getCollectFolder().'/';
 
         $files = (array)GeneralUtility::getAllFilesAndFoldersInPath(
             [],
-            $pagesDir,
+            $collectFolder,
             '',
             true
         );
 
-        $files = GeneralUtility::removePrefixPathFromList($files, $pagesDir);
+        $files = GeneralUtility::removePrefixPathFromList($files, $collectFolder);
         $files = array_filter($files);
 
         foreach ($files as $file) {
-            if (is_file($pagesDir . $file)) {
-                yield $pagesDir . $file;
+            if (is_file($collectFolder . $file)) {
+                yield $collectFolder . $file;
             }
         }
     }

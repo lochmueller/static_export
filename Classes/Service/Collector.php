@@ -31,7 +31,11 @@ class Collector
             $uri = $uri->withPath(rtrim($uri->getPath(), '/') . '/index.html');
         }
 
-        $targetFile = Environment::getProjectPath() . Exporter::BASE_EXPORT_DIR . Exporter::COLLECT_FOLDER . '/' . ltrim((string)$uri, '/');
+
+        /** @var PathService $pathService */
+        $pathService = GeneralUtility::makeInstance(PathService::class);
+
+        $targetFile = $pathService->getCollectFolder(). '/' . ltrim((string)$uri, '/');
 
         if (is_file($targetFile)) {
             unlink($targetFile);

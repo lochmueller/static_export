@@ -13,7 +13,11 @@ class Publisher
 {
     public function publish(string $fileName)
     {
-        $path = $this->getExportBasePath() . '/' . $fileName;
+
+        /** @var PathService $pathService */
+        $pathService = GeneralUtility::makeInstance(PathService::class);
+
+        $path = $pathService->getArchiveFolder() . '/' . $fileName;
         if (!is_file($path) || !is_readable($path)) {
             throw new \Exception('Die basis Datei existiert nicht oder kann nicht gelesen werden: ' . $path, 2372183);
         }
@@ -34,10 +38,5 @@ class Publisher
 
         $file = $folder->createFile($fileName);
         $file->setContents(file_get_contents($path));
-    }
-
-    protected function getExportBasePath(): string
-    {
-        return Environment::getProjectPath() . Exporter::BASE_EXPORT_DIR . Exporter::EXPORTS_FOLDER;
     }
 }

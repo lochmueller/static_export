@@ -14,12 +14,6 @@ class Exporter
     /** @var EventDispatcherInterface */
     protected $eventDispatcher;
 
-    public const BASE_EXPORT_DIR = '/export';
-
-    public const COLLECT_FOLDER = '/pages';
-
-    public const EXPORTS_FOLDER = '/exports';
-
     /**
      * @param EventDispatcherInterface $eventDispatcher
      */
@@ -30,12 +24,12 @@ class Exporter
 
     public function export(): string
     {
-        $this->checkEnv();
+        /** @var PathService $pathService */
+        $pathService = GeneralUtility::makeInstance(PathService::class);
 
-        $exportBaseDir = Environment::getProjectPath() . self::BASE_EXPORT_DIR;
         $exportName = 'export-' . date('Y-m-d-H-i-s');
 
-        $zipFile = $exportBaseDir . self::EXPORTS_FOLDER . '/' . $exportName . '.zip';
+        $zipFile = $pathService->getArchiveFolder() . '/' . $exportName . '.zip';
 
         $zip = new \ZipArchive();
         $zip->open($zipFile, \ZipArchive::CREATE);
@@ -48,23 +42,6 @@ class Exporter
         return $exportName . '.zip';
     }
 
-    protected function checkEnv()
-    {
-        $exportBaseDir = Environment::getProjectPath() . '/export';
-
-        if (!is_dir($exportBaseDir)) {
-            GeneralUtility::mkdir($exportBaseDir);
-        }
-
-        if (!is_dir($exportBaseDir . self::EXPORTS_FOLDER)) {
-            GeneralUtility::mkdir($exportBaseDir . self::EXPORTS_FOLDER);
-        }
-
-        if (!is_dir($exportBaseDir . self::COLLECT_FOLDER)) {
-            GeneralUtility::mkdir($exportBaseDir . self::COLLECT_FOLDER);
-        }
-    }
-
 
     public function cleanup(int $keepLocalExportNumber)
     {
@@ -72,9 +49,12 @@ class Exporter
         die('nothing');
         if ($keepLocalExportNumber > 0) {
 
-            $exportBaseDir = Environment::getProjectPath() . self::BASE_EXPORT_DIR;
+            /** @var PathService $pathService */
+            $pathService = GeneralUtility::makeInstance(PathService::class);
+            $archiveFolder  = $pathService->getArchiveFolder();
 
-            var_dump($exportBaseDir);
+
+            var_dump($archiveFolder);
         }
 
     }

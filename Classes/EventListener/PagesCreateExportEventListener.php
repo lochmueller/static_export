@@ -6,6 +6,7 @@ namespace FRUIT\StaticExport\EventListener;
 
 use FRUIT\StaticExport\Event\CreateExportEvent;
 use FRUIT\StaticExport\Service\Exporter;
+use FRUIT\StaticExport\Service\PathService;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -13,23 +14,25 @@ class PagesCreateExportEventListener
 {
     public function __invoke(CreateExportEvent $event)
     {
-        $pagesDir = Environment::getProjectPath() . Exporter::BASE_EXPORT_DIR . Exporter::COLLECT_FOLDER . '/';
+        /** @var PathService $pathService */
+        $pathService = GeneralUtility::makeInstance(PathService::class);
+        $collectFolder = $pathService->getCollectFolder().'/';
 
         $files = (array)GeneralUtility::getAllFilesAndFoldersInPath(
             [],
-            $pagesDir,
+            $collectFolder,
             '',
             true
         );
 
-        $files = GeneralUtility::removePrefixPathFromList($files, $pagesDir);
+        $files = GeneralUtility::removePrefixPathFromList($files, $collectFolder);
         $files = array_filter($files);
 
         foreach ($files as $file) {
-            if (is_dir($pagesDir . $file)) {
+            if (is_dir($collectFolder . $file)) {
                 $event->getZip()->addEmptyDir($file);
             } else {
-                $event->getZip()->addFile($pagesDir . $file, $file);
+                $event->getZip()->addFile($collectFolder . $file, $file);
             }
         }
     }

@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace FRUIT\StaticExport\Controller;
 
 use FRUIT\StaticExport\Service\Exporter;
+use FRUIT\StaticExport\Service\PathService;
 use FRUIT\StaticExport\Service\Publisher;
+use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Attribute\Controller;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Core\Environment;
@@ -21,18 +23,22 @@ class BackendController extends ActionController
     protected $moduleTemplateFactory;
     protected $exporter;
     protected $publisher;
+    protected $pathService;
 
     public function __construct(
         ModuleTemplateFactory $moduleTemplateFactory,
         Exporter              $exporter,
         Publisher             $publisher,
-    ) {
+        PathService           $pathService
+    )
+    {
         $this->publisher = $publisher;
         $this->exporter = $exporter;
         $this->moduleTemplateFactory = $moduleTemplateFactory;
+        $this->pathService = $pathService;
     }
 
-    public function listAction(bool $export = false): \Psr\Http\Message\ResponseInterface
+    public function listAction(bool $export = false): ResponseInterface
     {
         if ($export) {
             $exportName = $this->exporter->export();
@@ -48,14 +54,14 @@ class BackendController extends ActionController
         return $this->htmlResponse($moduleTemplate->renderContent());
     }
 
-    public function downloadAction(string $fileName): \Psr\Http\Message\ResponseInterface
+    public function downloadAction(string $fileName): ResponseInterface
     {
         if (!\in_array($fileName, $this->getExports())) {
             throw new \Exception('Wrong filename', 123678);
         }
 
         // @todo Move to file response
-        $path = $this->getExportBasePath() . '/' . $fileName;
+        $path = $this->pathService->getArchiveFolder() . '/' . $fileName;
 
         header('Content-Type: application/zip');
         header('Content-Transfer-Encoding: Binary');
@@ -65,7 +71,7 @@ class BackendController extends ActionController
         exit;
     }
 
-    public function publishAction(string $fileName): \Psr\Http\Message\ResponseInterface
+    public function publishAction(string $fileName): ResponseInterface
     {
         try {
             $this->publisher->publish($fileName);
@@ -77,7 +83,7 @@ class BackendController extends ActionController
         return new ForwardResponse('list');
     }
 
-    public function deleteAction(string $fileName): \Psr\Http\Message\ResponseInterface
+    public function deleteAction(string $fileName): ResponseInterface
     {
         try {
             $exports = $this->getExports();
@@ -86,7 +92,7 @@ class BackendController extends ActionController
                 throw new \Exception('Datei konnte nicht gefunden werden.', 123789123);
             }
 
-            if (!unlink($this->getExportBasePath() . '/' . $fileName)) {
+            if (!unlink($this->pathService->getArchiveFolder() . '/' . $fileName)) {
                 throw new \Exception('Datei konnte nicht gelöscht werden.', 1237891293231);
             }
             $this->addFlashMessage('Die Export-Datei wurde entfernt.', 'Löschen');
@@ -99,15 +105,10 @@ class BackendController extends ActionController
 
     protected function getExports(): array
     {
-        $files = GeneralUtility::getFilesInDir($this->getExportBasePath());
+        $files = GeneralUtility::getFilesInDir($this->pathService->getArchiveFolder());
         $result = array_values((array)$files);
         sort($result);
 
         return array_reverse($result);
-    }
-
-    protected function getExportBasePath(): string
-    {
-        return Environment::getProjectPath() . Exporter::BASE_EXPORT_DIR . Exporter::EXPORTS_FOLDER;
     }
 }
