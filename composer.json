@@ -26,12 +26,11 @@
 		}
 	],
 	"require": {
-		"php": "^8.0",
+		"php": "^7.2||^8.0",
 		"ext-json": "*",
 		"ext-pdo": "*",
 		"ext-zip": "*",
-		"typo3/cms-core": "^12.4",
-		"lochmueller/staticfilecache": "^13.1"
+		"typo3/cms-core": "^10.4||^11.5||^12.4"
 	},
 	"homepage": "https://github.com/lochmueller/static_export",
 	"license": "GPL-2.0-or-later",
