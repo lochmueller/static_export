@@ -64,4 +64,19 @@ class Exporter
             GeneralUtility::mkdir($exportBaseDir . self::COLLECT_FOLDER);
         }
     }
+
+
+    public function cleanup(int $keepLocalExportNumber)
+    {
+        // @todo implement
+        die('nothing');
+        if ($keepLocalExportNumber > 0) {
+
+            $exportBaseDir = Environment::getProjectPath() . self::BASE_EXPORT_DIR;
+
+            var_dump($exportBaseDir);
+        }
+
+    }
+
 }

@@ -16,6 +16,7 @@ return [
                 'list',
                 'download',
                 'publish',
+                'delete',
             ],
         ],
     ],

@@ -13,6 +13,7 @@ use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 #[Controller]
 class BackendController extends ActionController
@@ -23,20 +24,15 @@ class BackendController extends ActionController
 
     public function __construct(
         ModuleTemplateFactory $moduleTemplateFactory,
-        Exporter $exporter,
-        Publisher $publisher,
+        Exporter              $exporter,
+        Publisher             $publisher,
     ) {
         $this->publisher = $publisher;
         $this->exporter = $exporter;
         $this->moduleTemplateFactory = $moduleTemplateFactory;
     }
 
-    /**
-     * Basic backend list.
-     *
-     * @param bool $export
-     */
-    public function listAction($export = false): \Psr\Http\Message\ResponseInterface
+    public function listAction(bool $export = false): \Psr\Http\Message\ResponseInterface
     {
         if ($export) {
             $exportName = $this->exporter->export();
@@ -52,11 +48,6 @@ class BackendController extends ActionController
         return $this->htmlResponse($moduleTemplate->renderContent());
     }
 
-    /**
-     * Basic backend list.
-     *
-     * @param string $fileName
-     */
     public function downloadAction(string $fileName): \Psr\Http\Message\ResponseInterface
     {
         if (!\in_array($fileName, $this->getExports())) {
@@ -81,6 +72,26 @@ class BackendController extends ActionController
             $this->addFlashMessage('Die Datei wurde auf dem Ziel Storage bereitgestellt.', 'Publish');
         } catch (\Exception $exception) {
             $this->addFlashMessage($exception->getMessage(), 'Publish', ContextualFeedbackSeverity::ERROR);
+        }
+
+        return new ForwardResponse('list');
+    }
+
+    public function deleteAction(string $fileName): \Psr\Http\Message\ResponseInterface
+    {
+        try {
+            $exports = $this->getExports();
+
+            if (!in_array($fileName, $exports)) {
+                throw new \Exception('Datei konnte nicht gefunden werden.', 123789123);
+            }
+
+            if (!unlink($this->getExportBasePath() . '/' . $fileName)) {
+                throw new \Exception('Datei konnte nicht gelöscht werden.', 1237891293231);
+            }
+            $this->addFlashMessage('Die Export-Datei wurde entfernt.', 'Löschen');
+        } catch (\Exception $exception) {
+            $this->addFlashMessage('Die Export-Datei konnte nicht entfernt werden. Grund: ' . $exception->getMessage(), 'Löschen', ContextualFeedbackSeverity::ERROR);
         }
 
         return new ForwardResponse('list');
