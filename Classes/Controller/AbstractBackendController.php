@@ -17,50 +17,38 @@ use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
-#[Controller]
-class BackendController extends ActionController
+abstract class AbstractBackendController extends ActionController
 {
-    protected $moduleTemplateFactory;
     protected $exporter;
     protected $publisher;
     protected $pathService;
 
     public function __construct(
-        ModuleTemplateFactory $moduleTemplateFactory,
-        Exporter              $exporter,
-        Publisher             $publisher,
-        PathService           $pathService
+        Exporter    $exporter,
+        Publisher   $publisher,
+        PathService $pathService
     )
     {
         $this->publisher = $publisher;
         $this->exporter = $exporter;
-        $this->moduleTemplateFactory = $moduleTemplateFactory;
         $this->pathService = $pathService;
     }
 
-    public function listAction(bool $export = false): ResponseInterface
+    public function listProcess(bool $export = false): array
     {
         if ($export) {
             $exportName = $this->exporter->export();
             $this->addFlashMessage('Der Export mit dem folgenden Dateinamen wurde angelegt: ' . $exportName, 'Create');
         }
-        $this->view->assignMultiple([
-            'exports' => $this->getExports(),
-        ]);
-
-        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
-        $moduleTemplate->setContent($this->view->render());
-
-        return $this->htmlResponse($moduleTemplate->renderContent());
+        return $this->getExports();
     }
 
-    public function downloadAction(string $fileName): ResponseInterface
+    public function downloadProcess(string $fileName)
     {
         if (!\in_array($fileName, $this->getExports())) {
             throw new \Exception('Wrong filename', 123678);
         }
 
-        // @todo Move to file response
         $path = $this->pathService->getArchiveFolder() . '/' . $fileName;
 
         header('Content-Type: application/zip');
@@ -71,7 +59,7 @@ class BackendController extends ActionController
         exit;
     }
 
-    public function publishAction(string $fileName): ResponseInterface
+    public function publishProcess(string $fileName)
     {
         try {
             $this->publisher->publish($fileName);
@@ -79,11 +67,9 @@ class BackendController extends ActionController
         } catch (\Exception $exception) {
             $this->addFlashMessage($exception->getMessage(), 'Publish', ContextualFeedbackSeverity::ERROR);
         }
-
-        return new ForwardResponse('list');
     }
 
-    public function deleteAction(string $fileName): ResponseInterface
+    public function deleteProcess(string $fileName)
     {
         try {
             $exports = $this->getExports();
@@ -99,8 +85,6 @@ class BackendController extends ActionController
         } catch (\Exception $exception) {
             $this->addFlashMessage('Die Export-Datei konnte nicht entfernt werden. Grund: ' . $exception->getMessage(), 'Löschen', ContextualFeedbackSeverity::ERROR);
         }
-
-        return new ForwardResponse('list');
     }
 
     protected function getExports(): array
