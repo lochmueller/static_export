@@ -4,6 +4,6 @@
 /var
 /Tests/Unit/Build/.phpunit.result.cache
 /.php-cs-fixer.cache
-
+/composer.lock
 # ignore generated documentation
 *GENERATED*
