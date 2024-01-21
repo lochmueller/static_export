@@ -15,17 +15,13 @@ use TYPO3\CMS\Extbase\Http\ForwardResponse;
 
 class Backend10Controller extends AbstractBackendController
 {
-    public function listAction(bool $export = false): ResponseInterface
+    public function listAction(bool $export = false)
     {
-        // @todo handle view for v10
         $this->view->assignMultiple([
             'exports' => $this->listProcess($export),
         ]);
 
-        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
-        $moduleTemplate->setContent($this->view->render());
-
-        return $this->htmlResponse($moduleTemplate->renderContent());
+        return $this->view->render();
     }
 
     public function downloadAction(string $fileName)
