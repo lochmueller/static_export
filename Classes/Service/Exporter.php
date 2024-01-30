@@ -45,16 +45,23 @@ class Exporter
 
     public function cleanup(int $keepLocalExportNumber)
     {
-        // @todo implement
-        die('nothing');
         if ($keepLocalExportNumber > 0) {
 
             /** @var PathService $pathService */
             $pathService = GeneralUtility::makeInstance(PathService::class);
-            $archiveFolder  = $pathService->getArchiveFolder();
+            $archiveFolder = $pathService->getArchiveFolder();
 
+            $files = array_values(GeneralUtility::getFilesInDir($archiveFolder));
+            sort($files);
 
-            var_dump($archiveFolder);
+            $amount = sizeof($files);
+
+            if ($amount > $keepLocalExportNumber) {
+                $remove = (array)array_slice($files, 0, $amount - $keepLocalExportNumber);
+                foreach ($remove as $r) {
+                    unlink($archiveFolder . '/' . $r);
+                }
+            }
         }
 
     }

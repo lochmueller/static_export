@@ -16,12 +16,7 @@ class AssetsCreateExportEventListener
     const REGEX_PATHS = '/(href|src)="([^"]*)"/';
 
     const VALID_FILE_EXTENSIONS = [
-        'gif',
-        'png',
-        'js',
-        'css',
-        'svg',
-        'pdf',
+        '*'
     ];
 
     public function __invoke(CreateExportEvent $event)
@@ -62,7 +57,11 @@ class AssetsCreateExportEventListener
         });
 
         $assets = array_filter($assets, function ($item) {
-            return in_array(strtolower((string)pathinfo($item, PATHINFO_EXTENSION)), self::VALID_FILE_EXTENSIONS);
+            $extension = strtolower((string)pathinfo($item, PATHINFO_EXTENSION));
+            if (strlen($extension) <= 0) {
+                return false;
+            }
+            return in_array($extension, self::VALID_FILE_EXTENSIONS) || in_array('*', self::VALID_FILE_EXTENSIONS);
         });
 
         $assets = array_filter($assets, function ($item) {
