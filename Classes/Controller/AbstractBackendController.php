@@ -7,15 +7,11 @@ namespace FRUIT\StaticExport\Controller;
 use FRUIT\StaticExport\Service\Exporter;
 use FRUIT\StaticExport\Service\PathService;
 use FRUIT\StaticExport\Service\Publisher;
-use Psr\Http\Message\ResponseInterface;
-use TYPO3\CMS\Backend\Attribute\Controller;
-use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
-use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 abstract class AbstractBackendController extends ActionController
 {
@@ -65,7 +61,11 @@ abstract class AbstractBackendController extends ActionController
             $this->publisher->publish($fileName);
             $this->addFlashMessage('Die Datei wurde auf dem Ziel Storage bereitgestellt.', 'Publish');
         } catch (\Exception $exception) {
-            $this->addFlashMessage($exception->getMessage(), 'Publish', ContextualFeedbackSeverity::ERROR);
+            if ((new Typo3Version())->getMajorVersion() < 12) {
+                $this->addFlashMessage($exception->getMessage(), 'Publish', AbstractMessage::ERROR);
+            } else {
+                $this->addFlashMessage($exception->getMessage(), 'Publish', ContextualFeedbackSeverity::ERROR);
+            }
         }
     }
 
@@ -83,7 +83,12 @@ abstract class AbstractBackendController extends ActionController
             }
             $this->addFlashMessage('Die Export-Datei wurde entfernt.', 'Löschen');
         } catch (\Exception $exception) {
-            $this->addFlashMessage('Die Export-Datei konnte nicht entfernt werden. Grund: ' . $exception->getMessage(), 'Löschen', ContextualFeedbackSeverity::ERROR);
+            if ((new Typo3Version())->getMajorVersion() < 12) {
+                $this->addFlashMessage('Die Export-Datei konnte nicht entfernt werden. Grund: ' . $exception->getMessage(), 'Löschen', AbstractMessage::ERROR);
+            } else {
+                $this->addFlashMessage('Die Export-Datei konnte nicht entfernt werden. Grund: ' . $exception->getMessage(), 'Löschen', ContextualFeedbackSeverity::ERROR);
+            }
+
         }
     }
 

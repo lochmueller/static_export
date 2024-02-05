@@ -1,2 +1,5 @@
 # cat=general; type=string; label=Publish target
 publishTarget =
+
+# cat=general; type=string; label=Curl resolve
+curlResolve =
