@@ -26,3 +26,8 @@ services:
     tags:
       - name: 'console.command'
         command: 'staticexport:export-and-publish'
+
+  FRUIT\StaticExport\Command\CleanupCommand:
+    tags:
+      - name: 'console.command'
+        command: 'staticexport:cleanup'

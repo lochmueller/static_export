@@ -30,7 +30,7 @@ class CollectMiddleware implements MiddlewareInterface
     {
         $response = $handler->handle($request);
 
-        if (empty($request->getQueryParams())) {
+        if (empty($request->getQueryParams()) && $response->getStatusCode() === 200) {
             GeneralUtility::makeInstance(Collector::class, $this->eventDispatcher)->collect($request, $response);
         }
 

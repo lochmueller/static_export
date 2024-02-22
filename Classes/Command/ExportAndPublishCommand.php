@@ -48,9 +48,9 @@ class ExportAndPublishCommand extends Command
             $this->publisher->publish($this->exporter->export());
             $this->exporter->cleanup((int)$input->getOption('keep-local-export-number'));
         } catch (\Exception $exception) {
-            return self::FAILURE;
+            return 1;
         }
 
-        return self::SUCCESS;
+        return 0;
     }
 }

@@ -49,4 +49,10 @@ class Collector
         GeneralUtility::mkdir_deep(pathinfo($targetFile, \PATHINFO_DIRNAME));
         GeneralUtility::writeFile($targetFile, $event->getContent());
     }
+
+    public function cleanup()
+    {
+        $pathService = GeneralUtility::makeInstance(PathService::class);
+        GeneralUtility::rmdir($pathService->getCollectFolder(), true);
+    }
 }
